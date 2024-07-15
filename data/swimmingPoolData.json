@@ -1,0 +1,67 @@
+{
+  "videos": [
+    {
+      "id": 0,
+      "path": "/videos/swimming_pool/hero_2-hero_2.mp4",
+      "loop": true,
+      "type": "hero-loop"
+    },
+    {
+      "id": 1,
+      "path": "/videos/swimming_pool/hero_2-Swim_1.mp4",
+      "to": 3
+    },
+    {
+      "id": 2,
+      "path": "/videos/swimming_pool/Swim_1-hero_2.mp4",
+      "to": 0
+    },
+    {
+      "id": 3,
+      "path": "/videos/swimming_pool/Swim_1-Swim_1.mp4",
+      "loop": true,
+      "type": "swim1-loop"
+    },
+    {
+      "id": 4,
+      "path": "/videos/swimming_pool/hero_2-Swim_2.mp4",
+      "to": 6
+    },
+    {
+      "id": 5,
+      "path": "/videos/swimming_pool/Swim_2-hero_2.mp4",
+      "to": 0
+    },
+    {
+      "id": 6,
+      "path": "/videos/swimming_pool/Swim_2-Swim_2.mp4",
+      "loop": true,
+      "type": "swim2-loop"
+    },
+
+    {
+      "id": 7,
+      "path": "/videos/swimming_pool/Swim_2-Swim_1.mp4",
+      "to": 3
+    },
+    {
+      "id": 8,
+      "path": "/videos/swimming_pool/Swim_1-Swim_2.mp4",
+      "to": 6
+    }
+  ],
+  "actions": [
+    {
+     "path": "/videos/swimming_pool/hero.png",
+     "transitions": { "swim1-loop": 2, "swim2-loop": 5 }
+   },
+    {
+      "path": "/videos/swimming_pool/Swim_1-Swim_1_thumb.png",
+      "transitions": { "hero-loop": 1, "swim2-loop": 7 }
+    },
+     {
+      "path": "/videos/swimming_pool/Swim_2-Swim_2_thumb.png",
+      "transitions": { "hero-loop": 4, "swim1-loop": 8 }
+    }
+  ]
+}
