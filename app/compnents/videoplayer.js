@@ -2,16 +2,17 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import Thumbnails from "./thumbnails";
 
-const VideoPlayer = ({ video,actions }) => {
+const VideoPlayer = ({ video, actions }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [currentVideo, setCurrentVideo] = useState(video[0]);
+  const [transitionRunning, setTransitionRunning] = useState(false);
   const [paintCount, setPaintCount] = useState(0);
   const [startTime, setStartTime] = useState(0.0);
   const fpsInfoRef = useRef(null);
   const metadataInfoRef = useRef(null);
   const requestIdRef = useRef(null); // To store the requestId of the callback
-  const[action,setAction]=useState(null)
+  const [action, setAction] = useState(null);
   const updateCanvas = useCallback(
     (now, metadata) => {
       const videoElement = videoRef.current;
@@ -95,18 +96,25 @@ const VideoPlayer = ({ video,actions }) => {
     setCurrentVideo(newVideo);
   };
 
-  const handleVideoEnd= () => {
-      setCurrentVideo(video[currentVideo.to])
-  }
+  const handleVideoEnd = () => {
+    setCurrentVideo(video[currentVideo.to]);
+  };
 
-  const handleAction= (action) => {
-    if(action?.transitions[currentVideo?.type])
-    setCurrentVideo(video[action?.transitions[currentVideo?.type]])
-    setAction(action)
-  }
-
+  const handleAction = (action) => {
+    if (action?.transitions[currentVideo?.type]) {
+      setCurrentVideo(video[action?.transitions[currentVideo?.type]]);
+    }
+    setAction(action);
+  };
+  useEffect(() => {
+    if (currentVideo?.to != undefined) {
+      setTransitionRunning(true);
+    } else {
+      setTransitionRunning(false);
+    }
+  }, [currentVideo]);
   return (
-    <div>
+    <div className="overflow-hidden w-screen h-screen">
       <video
         muted
         autoPlay
@@ -117,10 +125,10 @@ const VideoPlayer = ({ video,actions }) => {
         onEnded={handleVideoEnd}
       ></video>
       <canvas
-        className="aspect-video w-[640px]"
+        className="aspect-video w-full"
         ref={canvasRef}
-        width={640}
-        height={320}
+        width={1920}
+        height={1080}
       ></canvas>
       <div className="hidden">
         {video.map((video, index) => (
@@ -133,12 +141,25 @@ const VideoPlayer = ({ video,actions }) => {
           </button>
         ))}
       </div>
-      <div className="text-fuchsia-400">{currentVideo.type?currentVideo.type:'Transition'}</div>
-      <Thumbnails actions={actions} handleAction={handleAction}/>
-      <div>{JSON.stringify(action?.transitions[currentVideo.type])}</div>
-      <div className="mt-2">
-        <div ref={fpsInfoRef}></div>
-        <pre ref={metadataInfoRef}></pre>
+      <div className="absolute top-0 w-1/2">
+        <Thumbnails
+          actions={actions}
+          handleAction={handleAction}
+          transitionRunning={transitionRunning}
+        />
+        <div className="hidden md:block">
+          <div className="text-fuchsia-400">
+            {currentVideo.type ? currentVideo.type : "Transition"}
+          </div>
+          <div>{transitionRunning.toString()}</div>
+          <div className=" text-yellow-200">
+            {JSON.stringify(action?.transitions[currentVideo.type])}
+          </div>
+          <div className="mt-2">
+            <div ref={fpsInfoRef}></div>
+            <pre ref={metadataInfoRef}></pre>
+          </div>
+        </div>
       </div>
     </div>
   );
