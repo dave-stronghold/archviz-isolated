@@ -87,7 +87,8 @@ const VideoPlayer = ({ video, actions }) => {
     const videoElement = videoRef.current;
     videoElement.onloadeddata = () => {
       setPaintCount(0); // Reset paint count
-      setStartTime(0.0); // Reset start time
+      setStartTime(0.0);
+      videoElement.style.display = "hidden"; // Reset start time
       videoElement.play();
     };
 
@@ -122,7 +123,14 @@ const VideoPlayer = ({ video, actions }) => {
         height={1080}
       ></canvas>
       <video
+      width={0}
+      height={0}
         muted
+        x5-playsinline
+        playsInline
+        disablePictureInPicture
+        webkit-playsinline
+        controlsList="nodownload nofullscreen noremoteplayback"
         autoPlay
         className="hidden opacity-0"
         ref={videoRef}
