@@ -114,22 +114,22 @@ const VideoPlayer = ({ video, actions }) => {
     }
   }, [currentVideo]);
   return (
-    <div className="overflow-hidden w-screen h-screen">
+    <div className="relative overflow-hidden w-screen h-screen">
+      <canvas
+        className="aspect-video w-full absolute"
+        ref={canvasRef}
+        width={1920}
+        height={1080}
+      ></canvas>
       <video
         muted
         autoPlay
-        className="hidden"
+        className="hidden opacity-0"
         ref={videoRef}
         src={currentVideo.path}
         loop={currentVideo.loop}
         onEnded={handleVideoEnd}
       ></video>
-      <canvas
-        className="aspect-video w-full"
-        ref={canvasRef}
-        width={1920}
-        height={1080}
-      ></canvas>
       <div className="hidden">
         {video.map((video, index) => (
           <button
