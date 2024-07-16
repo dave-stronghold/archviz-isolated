@@ -121,7 +121,7 @@ const VideoPlayer = ({ video, actions }) => {
         ref={canvasRef}
         width={1920}
         height={1080}
-      ></canvas>
+      />
       <video
       width={0}
       height={0}
@@ -137,7 +137,7 @@ const VideoPlayer = ({ video, actions }) => {
         src={currentVideo.path}
         loop={currentVideo.loop}
         onEnded={handleVideoEnd}
-      ></video>
+      />
       <div className="hidden">
         {video.map((video, index) => (
           <button
