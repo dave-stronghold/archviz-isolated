@@ -1,7 +1,5 @@
 "use client";
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import videojs from "video.js";
-import "video.js/dist/video-js.css";
 import Thumbnails from "./thumbnails";
 
 const VideoPlayer = ({ video, actions }) => {
@@ -15,8 +13,6 @@ const VideoPlayer = ({ video, actions }) => {
   const metadataInfoRef = useRef(null);
   const requestIdRef = useRef(null); // To store the requestId of the callback
   const [action, setAction] = useState(null);
-  const playerRef = useRef(null);
-
   const updateCanvas = useCallback(
     (now, metadata) => {
       const videoElement = videoRef.current;
@@ -52,38 +48,13 @@ const VideoPlayer = ({ video, actions }) => {
   );
 
   useEffect(() => {
-    const videoElement = videoRef.current;
-    if (!videoElement) return;
-    console.log(currentVideo.loop)
-    const player = videojs(videoElement, {
-      controls: false,
-      autoplay: true,
-      preload: "auto",
-      sources: [{ src: currentVideo.path, type: "video/mp4" }],
-    });
-
-    playerRef.current = player;
-
-    player.on("loadeddata", () => {
-      player.play();
-      setPaintCount(0);
-      setStartTime(0.0);
-    });
-
-    return () => {
-      if (player) {
-        player.dispose();
-      }
-    };
-  }, [currentVideo]);
-
-  useEffect(() => {
     if ("requestVideoFrameCallback" in HTMLVideoElement.prototype) {
       const videoElement = videoRef.current;
       requestIdRef.current =
         videoElement.requestVideoFrameCallback(updateCanvas);
 
       return () => {
+        // Clean up the callback
         if (requestIdRef.current) {
           videoElement.cancelVideoFrameCallback(requestIdRef.current);
         }
@@ -93,12 +64,37 @@ const VideoPlayer = ({ video, actions }) => {
     }
   }, [updateCanvas]);
 
+  useEffect(() => {
+    const videoElement = videoRef.current;
+
+    const handleLoadedData = () => {
+      videoElement.play();
+      setPaintCount(0); // Reset paint count
+      setStartTime(0.0); // Reset start time
+    };
+
+    videoElement.addEventListener("loadeddata", handleLoadedData);
+
+    // Initial setup to play the video
+    videoElement.play();
+
+    return () => {
+      videoElement.removeEventListener("loadeddata", handleLoadedData);
+    };
+  }, []);
+
   const changeVideo = (newVideo) => {
+    const videoElement = videoRef.current;
+    videoElement.onloadeddata = () => {
+      setPaintCount(0); // Reset paint count
+      setStartTime(0.0);
+      videoElement.style.display = "hidden"; // Reset start time
+      videoElement.play();
+    };
+
+    // Change the source of the main video element
+    // videoElement.src = newVideo;
     setCurrentVideo(newVideo);
-    if (playerRef.current) {
-      playerRef.current.src({ src: newVideo.path, type: "video/mp4" });
-      playerRef.current.load();
-    }
   };
 
   const handleVideoEnd = () => {
@@ -111,15 +107,13 @@ const VideoPlayer = ({ video, actions }) => {
     }
     setAction(action);
   };
-
   useEffect(() => {
-    if (currentVideo?.to !== undefined) {
+    if (currentVideo?.to != undefined) {
       setTransitionRunning(true);
     } else {
       setTransitionRunning(false);
     }
   }, [currentVideo]);
-
   return (
     <div className="relative overflow-hidden w-screen h-screen">
       <canvas
@@ -129,14 +123,20 @@ const VideoPlayer = ({ video, actions }) => {
         height={1080}
       />
       <video
-        ref={videoRef}
-        className="video-js vjs-hidden"
+      width={0}
+      height={0}
         muted
-        loop={currentVideo.loop}
+        x5-playsinline
         playsInline
-        onEnded={handleVideoEnd}
         disablePictureInPicture
+        webkit-playsinline
         controlsList="nodownload nofullscreen noremoteplayback"
+        autoPlay
+        className="hidden opacity-0"
+        ref={videoRef}
+        src={currentVideo.path}
+        loop={currentVideo.loop}
+        onEnded={handleVideoEnd}
       />
       <div className="hidden">
         {video.map((video, index) => (

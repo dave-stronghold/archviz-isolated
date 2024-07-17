@@ -1,4 +1,4 @@
-import VideoPlayer from "./compnents/videoplayer2";
+import VideoPlayer from "./compnents/videoplayer";
 import PrefetchVideos from "./PrefetchVideos";
 import swimmingPoolData from "@/data/swimmingPoolData.json";
 const videos = [
@@ -17,8 +17,8 @@ export default function Home() {
   return (
     <>
       <PrefetchVideos videoUrls={videos} />
-      {/* <VideoPlayer video={swimmingPoolData.videos} actions={swimmingPoolData.actions} /> */}
-      <VideoPlayer />
+      <VideoPlayer video={swimmingPoolData.videos} actions={swimmingPoolData.actions} />
+      {/* <VideoPlayer /> */}
     </>
   );
 }

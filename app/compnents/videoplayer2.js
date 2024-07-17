@@ -33,10 +33,10 @@ const VideoPlayer = () => {
         controlsList="nodownload nofullscreen noremoteplayback"
         autoPlay
         // src={sampleVideo}
-        src='/videos/test2.mp4'
+        src="/videos/test2.mp4"
         // src='/videos/swimming_pool/Swim_2-hero_2.mp4'
       />
-      <canvas ref={canvasRef} width={384} height={216} />
+      <canvas className="w-96" ref={canvasRef} width={1920} height={1080} />
       {/* <video src='/videos/test.mp4' width={400} controls autoPlay loop muted playsInline></video> */}
     </>
   );
