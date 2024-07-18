@@ -7,7 +7,7 @@ const VideoPlayer = ({ video, actions }) => {
   const [vdo_b, setvdo_b] = useState(video[0]);
   const [transitionRunning, setTransitionRunning] = useState(false);
   const [action, setAction] = useState(null);
-
+  const[debug,setDebug]=useState(false)
   const handleVideoStart = () => {
     vdo.to != undefined ? setvdo_b(video[vdo.to]) : null;
   };
@@ -32,10 +32,7 @@ const VideoPlayer = ({ video, actions }) => {
   }, [vdo]);
   return (
     <div className="relative overflow-hidden w-screen h-screen">
-      <div
-        //  className="absolute  w-full  aspect-video "
-        className="aspect-video w-96"
-      >
+      <div className={`aspect-video ${debug ? " h-1/2" : "absolute w-full"}`}>
         <video
           muted
           width={1920}
@@ -52,10 +49,7 @@ const VideoPlayer = ({ video, actions }) => {
           onEnded={handleVideoEnd}
         />
       </div>
-      <div
-        //  className="absolute  w-full  aspect-video "
-        className="aspect-video w-96"
-      >
+      <div className={`aspect-video ${debug ? "h-1/2" : "w-full"}`}>
         <video
           muted
           width={1920}
@@ -72,6 +66,7 @@ const VideoPlayer = ({ video, actions }) => {
       </div>
 
       <div className="absolute top-0 w-1/2">
+        <button className="bg-yellow-600" onClick={()=>setDebug(prev => !prev)}>{debug?'View Realtime':'View Debug'}</button>
         <Thumbnails
           actions={actions}
           handleAction={handleAction}
