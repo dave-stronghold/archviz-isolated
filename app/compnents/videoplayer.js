@@ -9,11 +9,9 @@ const VideoPlayer = ({ video, actions }) => {
   const [action, setAction] = useState(null);
 
   const handleVideoStart = () => {
-    vdo.to!=undefined?setvdo_b(video[vdo.to]):null;
- 
+    vdo.to != undefined ? setvdo_b(video[vdo.to]) : null;
   };
   const handleVideoEnd = () => {
- 
     setvdo(video[vdo.to]);
   };
 
@@ -25,7 +23,7 @@ const VideoPlayer = ({ video, actions }) => {
   };
 
   useEffect(() => {
-    console.log(vdo.to)
+    console.log(vdo.to);
     if (vdo?.to != undefined) {
       setTransitionRunning(true);
     } else {
@@ -34,34 +32,44 @@ const VideoPlayer = ({ video, actions }) => {
   }, [vdo]);
   return (
     <div className="relative overflow-hidden w-screen h-screen">
-      <video
-        muted
-        x5-playsinline=""
-        playsInline
-        disablePictureInPicture
-        webkit-playsinline=""
-        controlsList="nodownload nofullscreen noremoteplayback"
-        autoPlay
-        className="absolute aspect-video w-full"
-        // className=" aspect-video w-96"
-        src={vdo.path}
-        loop={vdo.loop}
-        onPlaying={handleVideoStart}
-        onEnded={handleVideoEnd}
-      />
-      <video
-        muted
-        x5-playsinline=""
-        playsInline
-        disablePictureInPicture
-        webkit-playsinline=""
-        controlsList="nodownload nofullscreen noremoteplayback"
-        autoPlay
-        // className=" aspect-video w-96"
-        className=" aspect-video w-full"
-        src={vdo_b.path}
-        loop={true}
-      />
+      <div
+        //  className="absolute  w-full  aspect-video "
+        className="aspect-video w-96"
+      >
+        <video
+          muted
+          width={1920}
+          height={1080}
+          x5-playsinline
+          playsInline
+          disablePictureInPicture
+          webkit-playsinline
+          controlsList="nodownload nofullscreen noremoteplayback"
+          autoPlay
+          src={vdo.path}
+          loop={vdo.loop}
+          onPlaying={handleVideoStart}
+          onEnded={handleVideoEnd}
+        />
+      </div>
+      <div
+        //  className="absolute  w-full  aspect-video "
+        className="aspect-video w-96"
+      >
+        <video
+          muted
+          width={1920}
+          height={1080}
+          x5-playsinline
+          playsInline
+          disablePictureInPicture
+          webkit-playsinline
+          controlsList="nodownload nofullscreen noremoteplayback"
+          autoPlay
+          src={vdo_b.path}
+          loop={true}
+        />
+      </div>
 
       <div className="absolute top-0 w-1/2">
         <Thumbnails
